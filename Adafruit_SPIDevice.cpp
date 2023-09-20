@@ -93,9 +93,9 @@ bool Adafruit_SPIDevice::begin(void) {
   if (_cs != -1) {
     //pinMode(_cs, OUTPUT);
     //digitalWrite(_cs, HIGH);
-    pinMode(SHIFT_REG_RCK, OUTPUT);
+    pinMode(SHIFT_REG_SER, OUTPUT);
     pinMode(SHIFT_REG_SCK, OUTPUT);
-    pinMode(SHIFT_REG_SCL, OUTPUT);
+    pinMode(SHIFT_REG_RCK, OUTPUT);
 
   }
 
