@@ -56,8 +56,8 @@ Adafruit_SPIDevice::Adafruit_SPIDevice(int8_t cspin, int8_t sckpin,
   _mosi = mosipin;
 
 #ifdef BUSIO_USE_FAST_PINIO
-  csPort = (BusIO_PortReg *)portOutputRegister(digitalPinToPort(cspin));
-  csPinMask = digitalPinToBitMask(cspin);
+  //csPort = (BusIO_PortReg *)portOutputRegister(digitalPinToPort(cspin));
+  //csPinMask = digitalPinToBitMask(cspin);
   if (mosipin != -1) {
     mosiPort = (BusIO_PortReg *)portOutputRegister(digitalPinToPort(mosipin));
     mosiPinMask = digitalPinToBitMask(mosipin);
@@ -91,8 +91,12 @@ Adafruit_SPIDevice::~Adafruit_SPIDevice() {
  */
 bool Adafruit_SPIDevice::begin(void) {
   if (_cs != -1) {
-    pinMode(_cs, OUTPUT);
-    digitalWrite(_cs, HIGH);
+    //pinMode(_cs, OUTPUT);
+    //digitalWrite(_cs, HIGH);
+    pinMode(SHIFT_REG_RCK, OUTPUT);
+    pinMode(SHIFT_REG_SCK, OUTPUT);
+    pinMode(SHIFT_REG_SCL, OUTPUT);
+
   }
 
   if (_spi) { // hardware SPI
@@ -305,7 +309,17 @@ void Adafruit_SPIDevice::endTransaction(void) {
  */
 void Adafruit_SPIDevice::setChipSelect(int value) {
   if (_cs != -1) {
-    digitalWrite(_cs, value);
+    //digitalWrite(_cs, value);
+    byte tempToRead = 0;
+    // turn off the output so the pins are not set
+    // while you're shifting bits:
+    digitalWrite(SHIFT_REG_RCK, LOW);
+    // turn on the next highest bit in tempToRead:
+    bitWrite(tempToRead, _cs, value);
+    // shift the bits out:
+    shiftOut(SHIFT_REG_SER, SHIFT_REG_SCK, MSBFIRST, tempToRead);
+    // turn on the output is set
+    digitalWrite(SHIFT_REG_RCK, HIGH);
   }
 }
 

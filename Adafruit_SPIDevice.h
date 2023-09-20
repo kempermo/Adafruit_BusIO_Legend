@@ -84,6 +84,10 @@ typedef uint32_t BusIO_PortMask;
 #undef BUSIO_USE_FAST_PINIO
 #endif
 
+#define SHIFT_REG_SER 14
+#define SHIFT_REG_SCK 27
+#define SHIFT_REG_RCK 26
+
 /**! The class which defines how we will talk to this device over SPI **/
 class Adafruit_SPIDevice {
 public:
